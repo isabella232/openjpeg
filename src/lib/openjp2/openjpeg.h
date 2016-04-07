@@ -82,7 +82,11 @@ Most compilers implement their own version of this keyword ...
 #		if defined(OPJ_STATIC) /* static library uses "hidden" */
 #			define OPJ_API    __attribute__ ((visibility ("hidden")))
 #		else
-#			define OPJ_API    __attribute__ ((visibility ("default")))
+#           if defined(EMSCRIPTEN)
+#               define OPJ_API    __attribute__((used))
+#           else
+#    			define OPJ_API    __attribute__ ((visibility ("default")))
+#           endif
 #		endif
 #		define OPJ_LOCAL  __attribute__ ((visibility ("hidden")))
 #	else
