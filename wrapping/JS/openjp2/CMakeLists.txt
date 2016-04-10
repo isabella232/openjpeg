@@ -19,4 +19,6 @@ add_library(openjpeg-js MODULE
 
 set_target_properties(openjpeg-js PROPERTIES SUFFIX ".bc")
 
+configure_file("JSOpenJPEGDecoder_post-js.js" ${EXECUTABLE_OUTPUT_PATH}/JSOpenJPEGDecoder_post-js.js COPYONLY)
+
 target_link_libraries(openjpeg-js openjp2)
