@@ -4,9 +4,43 @@
 
 * Added JS bindings in wrapping/JS/.
 * Merge Buffer-based streams from UltraLinq/openjpeg.
-* relaxed validation to enable decoding of truncated streams (may cause leaks)
+* Relaxed validation to enable decoding of truncated streams (may cause leaks)
+
+
+### Usage
+
+``` html
+<head>
+    <script src="libopenjpeg.js" type="text/javascript"></script>
+</head>
+...
+<script>
+Module['_main'] = function() {
+   xhr = new XMLHttpRequest();
+   xhr.open("GET", "img,jp2", true);
+   xhr.responseType = 'arraybuffer';
+   xhr.onload = function (oEvent) {
+      data = new Uint8Array(xhr.response);
+      
+      image =  Module.opj_decode(data);
+      
+      var length        = image.length;
+      var size_x        = image.sx;
+      var size_y        = image.sy;
+      var nbChannels    = image.nbChannels;
+      var timeToDecode  = image.perf_timetodecode;
+      var pixelData     = image.pixelData;
+   }
+}
+</script>
+```
+
+pixelData is a Int32Array and the format is 
+ * GGG... for grascale images
+ * RGBRGBRGB... for color images
 
 ### Building
+
 Requires 
 * emscripten
 * cmake
