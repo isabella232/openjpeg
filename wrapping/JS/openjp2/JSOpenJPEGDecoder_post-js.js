@@ -8,9 +8,9 @@ Module["opj_decode"] = function(data) {
         var imageSizeXPtr=Module._malloc(4);
         var imageSizeYPtr=Module._malloc(4);
 
-        var t0 = performance.now();
         var ret = Module.ccall('jp2_decode','number', ['number', 'number', 'number', 'number', 'number', 'number'],
                                                       [dataPtr, data.length, imagePtrPtr, imageSizePtr, imageSizeXPtr, imageSizeYPtr]);
+        var t0 = Date.now();
         // add num vomp..etc
         if(ret !== 0){
             console.log('[opj_decode] decoding failed!')
@@ -37,7 +37,7 @@ Module["opj_decode"] = function(data) {
         for (i = 0; i < image.pixelData.length; i++) {
             image.pixelData[i] = getValue(imagePtr + i*4, 'i32'); // because sizeof(i32) = 4
         }
-        var t1 = performance.now();
+        var t1 = Date.now();
         image.perf_timetodecode = t1-t0;
 
         // free
