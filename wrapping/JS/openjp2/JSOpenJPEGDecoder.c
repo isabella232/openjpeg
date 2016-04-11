@@ -66,8 +66,7 @@ static OPJ_BOOL seek_from_buffer (OPJ_OFF_T p_nb_bytes, void * p_buffer_reader)
 //  API
 //
 
-EMSCRIPTEN_API int jp2_decode(void* data, int data_size, void** p_image, int* p_image_size, int* size_x, int* size_y){
-    printf("jp2_decode - BEGING\n");
+EMSCRIPTEN_API int jp2_decode(void* data, int data_size, void** p_image, int* p_image_size, int* size_x, int* size_y, int* size_comp){
     opj_dparameters_t parameters;
     opj_codec_t* l_codec = NULL;
     opj_image_t* image = NULL;
@@ -126,11 +125,20 @@ EMSCRIPTEN_API int jp2_decode(void* data, int data_size, void** p_image, int* p_
 
     *size_x = image->x1;
     *size_y = image->y1;
+    *size_comp = image->numcomps;
 
-    *p_image_size = image->comps[0].h * image->comps[0].w * sizeof(OPJ_INT32);
+    *p_image_size = (*size_x) * (*size_y) * (*size_comp) * sizeof(OPJ_INT32);
     *p_image = malloc(*p_image_size);
 
-    memcpy(*p_image, image->comps[0].data, *p_image_size);
+    if(*size_comp == 1){
+        memcpy(*p_image, image->comps[0].data, *p_image_size);
+    }else if(*size_comp == 3){
+        for(int i = 0; i < (*size_x) * (*size_y); i++){
+            ((OPJ_INT32*)*p_image)[i*3+0] = image->comps[0].data[i];
+            ((OPJ_INT32*)*p_image)[i*3+1] = image->comps[1].data[i];
+            ((OPJ_INT32*)*p_image)[i*3+2] = image->comps[2].data[i];
+        }
+    }
 
     opj_stream_destroy(l_stream);
     opj_destroy_codec(l_codec);

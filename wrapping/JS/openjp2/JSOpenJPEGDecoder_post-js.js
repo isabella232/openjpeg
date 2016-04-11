@@ -7,10 +7,11 @@ Module["opj_decode"] = function(data) {
         var imageSizePtr=Module._malloc(4);
         var imageSizeXPtr=Module._malloc(4);
         var imageSizeYPtr=Module._malloc(4);
+        var imageSizeCompPtr=Module._malloc(4);
 
-        var ret = Module.ccall('jp2_decode','number', ['number', 'number', 'number', 'number', 'number', 'number'],
-                                                      [dataPtr, data.length, imagePtrPtr, imageSizePtr, imageSizeXPtr, imageSizeYPtr]);
         var t0 = Date.now();
+        var ret = Module.ccall('jp2_decode','number', ['number', 'number', 'number', 'number', 'number', 'number', 'number'],
+                                                      [dataPtr, data.length, imagePtrPtr, imageSizePtr, imageSizeXPtr, imageSizeYPtr, imageSizeCompPtr]);
         // add num vomp..etc
         if(ret !== 0){
             console.log('[opj_decode] decoding failed!')
@@ -19,6 +20,7 @@ Module["opj_decode"] = function(data) {
             Module._free(imageSizeXPtr);
             Module._free(imageSizeYPtr);
             Module._free(imageSizePtr);
+            Module._free(imageSizeCompPtr);
             return undefined;
         }
 
@@ -28,7 +30,7 @@ Module["opj_decode"] = function(data) {
             length : getValue(imageSizePtr,'i32'),
             sx :  getValue(imageSizeXPtr,'i32'),
             sy :  getValue(imageSizeYPtr,'i32'),
-            nbChannels : 1, // hard coded for now
+            nbChannels : getValue(imageSizeCompPtr,'i32'), // hard coded for now
             perf_timetodecode : undefined,
             pixelData : undefined
         };
@@ -47,6 +49,7 @@ Module["opj_decode"] = function(data) {
         Module._free(imageSizePtr);
         Module._free(imageSizeXPtr);
         Module._free(imageSizeYPtr);
+        Module._free(imageSizeCompPtr);
 
         return image;
     }
