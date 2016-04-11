@@ -4408,8 +4408,7 @@ static OPJ_BOOL opj_j2k_read_sod (opj_j2k_t *p_j2k,
             /* If we are here, we'll try to read the data after allocation */
             /* Check enough bytes left in stream before allocation */
             if ((OPJ_OFF_T)p_j2k->m_specific_param.m_decoder.m_sot_length > opj_stream_get_number_byte_left(p_stream)) {
-                opj_event_msg(p_manager, EVT_ERROR, "Tile part length size inconsistent with stream length\n");
-                return OPJ_FALSE;
+                opj_event_msg(p_manager, EVT_WARNING, "Tile part length size inconsistent with stream length\n");
             }
             if (! *l_current_data) {
                 /* LH: oddly enough, in this path, l_tile_len!=0.
