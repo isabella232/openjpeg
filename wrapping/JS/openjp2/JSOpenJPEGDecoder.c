@@ -47,22 +47,6 @@ static void info_callback(const char *msg, void *client_data) {
 }
 
 //
-//  Stream I/O
-//
-
-static OPJ_SIZE_T read_from_buffer (void * p_buffer, OPJ_SIZE_T p_nb_bytes, void * data)
-{
-    memcpy(p_buffer, data, p_nb_bytes);
-    return p_nb_bytes;
-}
-
-static OPJ_BOOL seek_from_buffer (OPJ_OFF_T p_nb_bytes, void * p_buffer_reader)
-{
-    //because of hardcoded check in OPJ..
-    return OPJ_TRUE;
-}
-
-//
 //  API
 //
 
@@ -87,11 +71,12 @@ EMSCRIPTEN_API int jp2_decode(void* data, int data_size, void** p_image, int* p_
 
     opj_set_default_decoder_parameters(&parameters);
 
-    l_stream = opj_stream_create(data_size, 1);
-    opj_stream_set_user_data(l_stream, data, (opj_stream_free_user_data_fn) NULL);
-    opj_stream_set_user_data_length(l_stream, data_size);
-    opj_stream_set_read_function(l_stream, (opj_stream_read_fn) read_from_buffer);
-    opj_stream_set_seek_function(l_stream, (opj_stream_seek_fn) seek_from_buffer);
+    // set stream
+    opj_buffer_info_t buffer_info;
+    buffer_info.buf = data;
+    buffer_info.cur = data;
+    buffer_info.len = data_size;
+    l_stream = opj_stream_create_buffer_stream(&buffer_info, OPJ_TRUE);
 
     /* Setup the decoder decoding parameters using user parameters */
     if ( !opj_setup_decoder(l_codec, &parameters) ){
