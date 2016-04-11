@@ -35,15 +35,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 static void error_callback(const char *msg, void *client_data) {
     (void)client_data;
-    fprintf(stdout, "[ERROR] %s", msg);
+    printf("[ERROR] %s", msg);
 }
 static void warning_callback(const char *msg, void *client_data) {
     (void)client_data;
-    fprintf(stdout, "[WARNING] %s", msg);
+    // printf("[WARNING] %s", msg);
 }
 static void info_callback(const char *msg, void *client_data) {
     (void)client_data;
-    fprintf(stdout, "[INFO] %s", msg);
+    // printf("[INFO] %s", msg);
 }
 
 //
@@ -75,10 +75,10 @@ EMSCRIPTEN_API int jp2_decode(void* data, int data_size, void** p_image, int* p_
     // detect stream type
     if( ((OPJ_INT32*)data)[0] == J2K_MAGIC_NUMBER ){
         l_codec = opj_create_decompress(OPJ_CODEC_J2K);
-        fprintf(stdout, "OPJ_CODEC_J2K\n");
+        // printf("OPJ_CODEC_J2K\n");
     }else{
         l_codec = opj_create_decompress(OPJ_CODEC_JP2);
-        fprintf(stdout, "OPJ_CODEC_JP2\n");
+        // printf("OPJ_CODEC_JP2\n");
     }
 
     opj_set_info_handler(l_codec, info_callback,00);
@@ -95,7 +95,7 @@ EMSCRIPTEN_API int jp2_decode(void* data, int data_size, void** p_image, int* p_
 
     /* Setup the decoder decoding parameters using user parameters */
     if ( !opj_setup_decoder(l_codec, &parameters) ){
-        fprintf(stderr, "ERROR -> opj_decompress: failed to setup the decoder\n");
+        printf("[ERROR] opj_decompress: failed to setup the decoder\n");
         opj_stream_destroy(l_stream);
         opj_destroy_codec(l_codec);
         return 1;
@@ -103,7 +103,7 @@ EMSCRIPTEN_API int jp2_decode(void* data, int data_size, void** p_image, int* p_
 
     /* Read the main header of the codestream and if necessary the JP2 boxes*/
     if(! opj_read_header(l_stream, l_codec, &image)){
-        fprintf(stderr, "ERROR -> opj_decompress: failed to read the header\n");
+        printf("[ERROR] opj_decompress: failed to read the header\n");
         opj_stream_destroy(l_stream);
         opj_destroy_codec(l_codec);
         opj_image_destroy(image);
@@ -111,17 +111,17 @@ EMSCRIPTEN_API int jp2_decode(void* data, int data_size, void** p_image, int* p_
     }
 
     if (!opj_get_decoded_tile(l_codec, l_stream, image, parameters.tile_index)) {
-        fprintf(stderr, "ERROR -> opj_decompress: failed to decode tile!\n");
+        printf("[ERROR] opj_decompress: failed to decode tile!\n");
         opj_destroy_codec(l_codec);
         opj_stream_destroy(l_stream);
         opj_image_destroy(image);
         return 1;
     }
 
-    fprintf(stdout, "tile %d is decoded!\n\n", parameters.tile_index);
-    fprintf(stdout, "image X %d\n", image->x1);
-    fprintf(stdout, "image Y %d\n", image->y1);
-    fprintf(stdout, "image numcomps %d\n", image->numcomps);
+    // printf("tile %d is decoded!\n\n", parameters.tile_index);
+    // printf("image X %d\n", image->x1);
+    // printf("image Y %d\n", image->y1);
+    // printf("image numcomps %d\n", image->numcomps);
 
     *size_x = image->x1;
     *size_y = image->y1;
