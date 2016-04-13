@@ -62,7 +62,7 @@ mkdir dist
 emcc bin/libopenjpeg-js.bc -o dist/libopenjpeg.js \
      --post-js bin/JSOpenJPEGDecoder_post-js.js \
      --memory-init-file 0 \
-     -s TOTAL_MEMORY=500000000 \
+     -s TOTAL_MEMORY=50000000 \
      -s NO_FILESYSTEM=1 \
      -O3
 ```
