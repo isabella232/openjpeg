@@ -9,35 +9,7 @@
 
 ### Usage
 
-``` html
-<head>
-    <script src="libopenjpeg.js" type="text/javascript"></script>
-</head>
-...
-<script>
-Module['_main'] = function() {
-   xhr = new XMLHttpRequest();
-   xhr.open("GET", "img,jp2", true);
-   xhr.responseType = 'arraybuffer';
-   xhr.onload = function (oEvent) {
-      data = new Uint8Array(xhr.response);
-      
-      image =  Module.opj_decode(data);
-      
-      var length        = image.length;
-      var size_x        = image.sx;
-      var size_y        = image.sy;
-      var nbChannels    = image.nbChannels;
-      var timeToDecode  = image.perf_timetodecode;
-      var pixelData     = image.pixelData;
-   }
-}
-</script>
-```
-
-pixelData is a Int32Array and the format is 
- * GGG... for grascale images
- * RGBRGBRGB... for color images
+See https://github.com/chafey/cornerstoneWADOImageLoader/blob/master/src/decoders/decodeJPEG2000.js
 
 ### Building
 
@@ -60,11 +32,13 @@ cmake .
 make
 mkdir dist
 emcc bin/libopenjpeg-js.bc -o dist/libopenjpeg.js \
-     --post-js bin/JSOpenJPEGDecoder_post-js.js \
      --memory-init-file 0 \
-     -s TOTAL_MEMORY=50000000 \
+     -s EXPORTED_FUNCTIONS="['_jp2_decode']" \
+     -s ALLOW_MEMORY_GROWTH=1 \
      -s NO_FILESYSTEM=1 \
+     -s EXPORT_NAME="'OpenJPEG'" \
+     -s MODULARIZE=1 \
      -O3
 ```
 
-The output is bin/libopenjpeg.js and bin/libopenjpeg.js.mem.
+The output is bin/libopenjpeg.js
