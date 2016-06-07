@@ -1,4 +1,4 @@
-/*! OpenJPEG.js - v0.2.0 - 2016-06-07 | (c) 2016 Chris Hafey | https://github.com/chafey/openjpeg */
+/*! OpenJPEG.js - v0.10.0 - 2016-06-07 | (c) 2016 Chris Hafey | https://github.com/chafey/openjpeg */
 var OpenJPEG = function(Module) {
   Module = Module || {};
 

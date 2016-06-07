@@ -1,1 +1,1 @@
-// OpenJPEG.js version = "0.2.0";
+// OpenJPEG.js version = "0.10.0";
