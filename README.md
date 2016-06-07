@@ -6,7 +6,6 @@
 * Merge Buffer-based streams from UltraLinq/openjpeg.
 * Relaxed validation to enable decoding of truncated streams (may cause leaks)
 
-
 ### Usage
 
 See https://github.com/chafey/cornerstoneWADOImageLoader/blob/master/src/decoders/decodeJPEG2000.js
@@ -16,29 +15,19 @@ See https://github.com/chafey/cornerstoneWADOImageLoader/blob/master/src/decoder
 Requires 
 * emscripten
 * cmake
+* node
+* grunt
 
-```bash
-git clone https://github.com/jpambrun/openjpeg
-mkdir openjpeg-build
-cd openjpeg-build
-cmake -DCMAKE_TOOLCHAIN_FILE=/usr/lib/emscripten/cmake/Modules/Platform/Emscripten.cmake \
-   -DCMAKE_BUILD_TYPE=Release \
-   -DBUILD_CODEC=OFF \
-   -DBUILD_JS=ON \
-   -DBUILD_SHARED_LIBS=OFF \
-   -G"Unix Makefiles" \
-   ../openjpeg
-cmake .
-make
-mkdir dist
-emcc bin/libopenjpeg-js.bc -o dist/libopenjpeg.js \
-     --memory-init-file 0 \
-     -s EXPORTED_FUNCTIONS="['_jp2_decode']" \
-     -s ALLOW_MEMORY_GROWTH=1 \
-     -s NO_FILESYSTEM=1 \
-     -s EXPORT_NAME="'OpenJPEG'" \
-     -s MODULARIZE=1 \
-     -O3
-```
+> grunt
 
-The output is bin/libopenjpeg.js
+The output is dist/openJPEG-DynamicMemory.js and dist/openJPEG-FixedMemory.js
+
+#### openJPEG-DynamicMemory.js
+
+Slower but should handle any size image
+
+#### openJPEG-FixedMemory.js
+
+Faster but will crash if you run out of memory
+
+
