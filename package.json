@@ -1,6 +1,6 @@
 {
   "name": "OpenJPEG.js",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "EMSCRIPTEN build of OpenJPEG",
   "keywords": [
     "OpenJPEG",
