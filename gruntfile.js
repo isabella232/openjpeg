@@ -21,7 +21,7 @@ module.exports = function(grunt) {
       cmakegen: {
         cmd: 'cmake',
         args: [
-          '-DCMAKE_TOOLCHAIN_FILE=$EMSCRIPTEN/cmake/Modules/Platform/Emscripten.cmake',
+          '-DCMAKE_TOOLCHAIN_FILE=/Users/chafey/emsdk_portable/emscripten/1.35.0/cmake/Modules/Platform/Emscripten.cmake',
           '-DCMAKE_BUILD_TYPE=Release',
           '-DBUILD_CODEC=OFF',
           '-DBUILD_JS=ON',
@@ -46,25 +46,45 @@ module.exports = function(grunt) {
       }
     },
     concat: {
-      distOpenJPEGFixedMemory: {
+      distOpenJPEGFixedMemoryBrowser: {
         options: {
           stripBanners: true,
           banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
           '<%= grunt.template.today("yyyy-mm-dd") %> ' +
           '| (c) 2016 Chris Hafey | https://github.com/chafey/openjpeg */\n'
         },
-        src : ['build/openJPEG-FixedMemory.js'],
-        dest: 'dist/openJPEG-FixedMemory.js'
+        src : ['build/openJPEG-FixedMemory-browser.js'],
+        dest: 'dist/openJPEG-FixedMemory-browser.js'
       },
-      distOpenJPEGDynamicMemory: {
+      distOpenJPEGDynamicMemoryBrowser: {
         options: {
           stripBanners: true,
           banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
           '<%= grunt.template.today("yyyy-mm-dd") %> ' +
           '| (c) 2016 Chris Hafey | https://github.com/chafey/openjpeg */\n'
         },
-        src : ['build/openJPEG-DynamicMemory.js'],
-        dest: 'dist/openJPEG-DynamicMemory.js'
+        src : ['build/openJPEG-DynamicMemory-browser.js'],
+        dest: 'dist/openJPEG-DynamicMemory-browser.js'
+      },
+      distOpenJPEGFixedMemoryCommonJS: {
+        options: {
+          stripBanners: true,
+          banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+          '<%= grunt.template.today("yyyy-mm-dd") %> ' +
+          '| (c) 2016 Chris Hafey | https://github.com/chafey/openjpeg */\n'
+        },
+        src : ['build/openJPEG-FixedMemory-commonJS.js'],
+        dest: 'dist/openJPEG-FixedMemory-commonJS.js'
+      },
+      distOpenJPEGDynamicMemoryCommonJS: {
+        options: {
+          stripBanners: true,
+          banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+          '<%= grunt.template.today("yyyy-mm-dd") %> ' +
+          '| (c) 2016 Chris Hafey | https://github.com/chafey/openjpeg */\n'
+        },
+        src : ['build/openJPEG-DynamicMemory-commonJS.js'],
+        dest: 'dist/openJPEG-DynamicMemory-commonJS.js'
       }
 
     },
