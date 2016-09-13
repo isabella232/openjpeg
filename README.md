@@ -20,14 +20,22 @@ Requires
 
 > grunt
 
-The output is dist/openJPEG-DynamicMemory.js and dist/openJPEG-FixedMemory.js
+The output is in the dist folder:
 
-#### openJPEG-DynamicMemory.js
+#### openJPEG-DynamicMemory-browser.js
 
-Slower but should handle any size image
+Slower but should handle any size image.  Uses a global object so can work in a web browser
 
-#### openJPEG-FixedMemory.js
+#### openJPEG-DynamicMemory-commonJS.js
 
-Faster but will crash if you run out of memory
+Slower but should handle any size image.  CommonJS so loads into Node.js
+
+#### openJPEG-FixedMemory-browser.js
+
+Faster but will crash if you run out of memory.  Uses a global object so can work in a web browser
+
+#### openJPEG-FixedMemory-commonJS.js
+
+Faster but will crash if you run out of memory.  CommonJS so loads into Node.js
 
 
