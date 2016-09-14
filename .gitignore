@@ -1,4 +1,7 @@
+.DS_Store
 # Ignore files and directories made by `cmake .`.
+build/
+node_modules/
 CMakeFiles/
 Makefile
 cmake_install.cmake
