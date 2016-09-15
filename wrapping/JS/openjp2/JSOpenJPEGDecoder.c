@@ -50,7 +50,7 @@ static void info_callback(const char *msg, void *client_data) {
 //  API
 //
 
-EMSCRIPTEN_API int jp2_decode(void* data, int data_size, void** p_image, int* p_image_size, int* size_x, int* size_y, int* size_comp){
+EMSCRIPTEN_API int jp2_decode(void* data, int data_size, void** p_image, int* p_image_size, int* size_x, int* size_y, int* size_comp, int* bpp, int* prec, int* sgnd, int* colorSpace){
     opj_dparameters_t parameters;
     opj_codec_t* l_codec = NULL;
     opj_image_t* image = NULL;
@@ -95,7 +95,8 @@ EMSCRIPTEN_API int jp2_decode(void* data, int data_size, void** p_image, int* p_
         return 1;
     }
 
-    if (!opj_get_decoded_tile(l_codec, l_stream, image, parameters.tile_index)) {
+    /* decode the image */
+    if (!opj_decode(l_codec, l_stream, image)) {
         printf("[ERROR] opj_decompress: failed to decode tile!\n");
         opj_destroy_codec(l_codec);
         opj_stream_destroy(l_stream);
@@ -108,9 +109,15 @@ EMSCRIPTEN_API int jp2_decode(void* data, int data_size, void** p_image, int* p_
     // printf("image Y %d\n", image->y1);
     // printf("image numcomps %d\n", image->numcomps);
 
+    //printf("prec=%d, bpp=%d, sgnd=%d\n", image->comps[0].prec, image->comps[0].bpp, image->comps[0].sgnd);
+
     *size_x = image->x1;
     *size_y = image->y1;
     *size_comp = image->numcomps;
+    *prec = image->comps[0].prec;
+    *sgnd = image->comps[0].sgnd;
+    *bpp = image->comps[0].bpp;
+    *colorSpace = image->color_space;
 
     *p_image_size = (*size_x) * (*size_y) * (*size_comp) * sizeof(OPJ_INT32);
     *p_image = malloc(*p_image_size);
